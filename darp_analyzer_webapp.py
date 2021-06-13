@@ -4,7 +4,6 @@ import numpy as np
 from os import listdir
 from os.path import isfile, join
 import os
-import subprocess
 import json
 import requests
 import urllib.parse
@@ -35,19 +34,30 @@ def load_data(data_path, id=None):
 def update_data():
     os.system('sh ./data/load_data.sh')
 
-def get_coordenates(address='Dubai'):
+def query_city_coordenates(address='Dubai'):
     url = 'https://nominatim.openstreetmap.org/search/' + urllib.parse.quote(address) +'?format=json'
     response = requests.get(url).json()
 
     if not response:
         return None
 
-    df = pd.DataFrame.from_dict(response[0])    
-    df = df[['lat', 'lon']]
-    df = df.astype(np.float16)
-    df = df.drop(df.index[range(1,len(df.index))])
+    df_cities = pd.DataFrame.from_dict(response[0])    
+    df_cities = df_cities[['lat', 'lon']]
+    df_cities = df_cities.astype(np.float16)
+    df_cities = df_cities.drop(df_cities.index[range(1,len(df_cities.index))])
 
-    return df
+    return df_cities
+
+def get_city_coordinates(address='Dubai'):
+
+    df_cities = pd.read_csv('utils/city_coordinates.csv')  
+
+    df_cities = df_cities.loc[df_cities['city'] == address]
+
+    if df_cities is not None:
+        return df_cities
+    else:
+        return query_city_coordenates(address=address)
 
 # WEB APP DEFINITION
 
@@ -80,16 +90,16 @@ class WebApp():
     def map_visualization(self):
         st.header("Map Visualization")
         
-        df = pd.DataFrame()
-        for i in [x for x in self.groups_df['city']][:1]:
+        df_map = pd.DataFrame()
+        for i in [x for x in self.groups_df['city']]:
             if i is None:
                 continue
-            temp_df = get_coordenates(address=i)
+            temp_df = get_city_coordinates(address=i)
             if temp_df is not None:
-                df = df.append(temp_df)
+                df_map = df_map.append(temp_df)
 
-        st.write(df)
-        st.map(df[['lat', 'lon']])
+        st.write(df_map)
+        st.map(df_map[['lat', 'lon']])
             
     def improvement_prediction(self):
         st.header("ML Modelling")
