@@ -21,7 +21,7 @@ class WebApp():
         button = st.button('Update Data')
         if button:
             self._update_data()
-
+    
     def _update_data(self):
         update_data()
         groups = load_data(data_path='groups')
@@ -31,26 +31,29 @@ class WebApp():
 
     def raw_data_visualization(self):
         st.header("Raw Data Visualization")
-        checkbox = st.checkbox("Visualize")
-        if checkbox:
+        checkbox_raw = st.checkbox("Visualize Raw Data")
+        if checkbox_raw:
             st.write(self.groups_df)
             st.write(self.latencies_df)
     
     def map_visualization(self):
         st.header("Map Visualization")
-        
-        df_map = pd.DataFrame()
-        countries_list = [x for x in self.groups_df['country']]
-        for i, city in enumerate([x for x in self.groups_df['city']]):
+        checkbox_map = st.checkbox("Visualize Map")
+        if checkbox_map:
+            df_map = pd.DataFrame()
+            countries_list = [x for x in self.groups_df['country']]
+            for i, city in enumerate([x for x in self.groups_df['city']]):
 
-            if city is None:
-                city = get_capital_city(countries_list[i])
+                if city is None:
+                    city = get_capital_city(countries_list[i])
 
-            temp_df = get_city_coordinates(address=str(city))
-            df_map = df_map.append(temp_df)
+                temp_df = get_city_coordinates(address=str(city))
+                df_map = df_map.append(temp_df)
 
-        st.write(df_map)
-        st.map(df_map[['lat', 'lon']])
+            #st.write(df_map)        
+            self.groups_df = pd.merge(self.groups_df, df_map, on='city')        
+            st.write(self.groups_df)
+            st.map(self.groups_df[['lat', 'lon']])
             
     def improvement_prediction(self):
         st.header("ML Modelling")

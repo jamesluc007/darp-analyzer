@@ -7,6 +7,7 @@ import json
 import yaml
 import requests
 import urllib.parse
+import streamlit as st
 
 def load_data(data_path, id=None):
     full_data_path = './data/{}'.format(data_path)
@@ -31,6 +32,7 @@ def load_data(data_path, id=None):
     
     return None
 
+@st.cache(persist=True)
 def update_data():
     os.system('sh ./data/load_data.sh')
 
