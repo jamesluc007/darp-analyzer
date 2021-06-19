@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-GROUPS_DIR=./groups/ 
-LATENCIES_DIR=./latencies/ 
+GROUPS_DIR=./data/groups/ 
+LATENCIES_DIR=./data/latencies/ 
 
 rm -rfv $GROUPS_DIR
 rm -rfv $LATENCIES_DIR

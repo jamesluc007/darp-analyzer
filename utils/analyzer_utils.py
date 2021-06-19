@@ -32,17 +32,13 @@ def load_data(data_path, id=None):
     
     return None
 
-@st.cache(persist=True)
-def update_data():
-    os.system('sh ./data/load_data.sh')
-
 def query_city_coordinates(address='Dubai'):
     url = 'https://nominatim.openstreetmap.org/search/' + urllib.parse.quote(address) +'?format=json'
     response = requests.get(url).json()
 
     if not response:
         #df_cities = pd.DataFrame()
-        # Dangerous workaround for Å iauliai:
+        # Dangerous workaround for Å iauliai city:
         df_cities = pd.DataFrame(columns=["lat", "lon", "city"], data=[[55.92,23.31, address]])
     else:
         df_cities = pd.DataFrame.from_dict(response[0])
@@ -55,12 +51,11 @@ def query_city_coordinates(address='Dubai'):
 def get_city_coordinates(address='Dubai'):
 
     df_cities = pd.read_csv('utils/city_coordinates.csv')  
-
     df_cities.drop_duplicates(subset ="city",
                      keep = 'first', inplace = True)
 
     df_cities = df_cities.loc[df_cities['city'] == address]
-
+    
     if not df_cities.empty:
         return df_cities
     else:
@@ -78,4 +73,42 @@ def get_capital_city(country_prefix):
     df_capitals = df_capitals.loc[df_capitals['country'] == countries_dict[country_prefix]]
 
     return df_capitals['capital'].iloc[0]
+
+def map_preprocessing(data, latencies, id_selection=0, arc_map=False):
+        df_map = pd.DataFrame()
+        local_group_df = data.copy()
+
+        for city in [x for x in local_group_df['city']]:
+            df_map = df_map.append(get_city_coordinates(address=str(city)))
+
+        local_group_df = pd.merge(local_group_df, df_map, on='city')     
+        local_group_df.drop_duplicates(subset ="id",
+                keep = 'first', inplace = True)  
+        local_group_df = local_group_df.reset_index(drop=True)
+
+        if arc_map:
+            # Latencies procedure
+            index = local_group_df.loc[local_group_df['id'] == id_selection].index[0]
+            latencies = pd.Series.to_frame(latencies[index])
+            latencies = latencies.rename(columns={index:'latencies'})
+            local_group_df = pd.concat([local_group_df, latencies], axis=1, join="inner")
+
+            # -------- ARC Layer ----------
+            # 1
+            arc_df = local_group_df[['id','lat','lon','latencies']].drop([index])
+            # 2
+            temp_lat = local_group_df.iloc[index]['lat']
+            temp_lon = local_group_df.iloc[index]['lon']
+            n_rows = arc_df.shape[0]
+            lat_s = pd.DataFrame.from_dict({'lat_s': [temp_lat for i in range(1,n_rows+1)]})
+            lon_s = pd.DataFrame.from_dict({'lon_s': [temp_lon for i in range(1,n_rows+1)]})
+            # 3
+            arc_df = pd.concat([arc_df, lat_s], axis=1, join="inner")
+            arc_df = pd.concat([arc_df, lon_s], axis=1, join="inner")
+            arc_df = arc_df.reset_index(drop=True)
+            # -----------------------------
+        else:
+            arc_df=None
+        
+        return local_group_df, arc_df 
 
