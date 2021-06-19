@@ -92,9 +92,9 @@ class WebApp():
                 st.write("Map Number {}:".format(i+1))      
 
                 if map_config.map_type!='ArcMap':
-                    local_group_df, arc_df = map_preprocessing(self.groups_df,self.latencies_df.copy(), arc_map=False)
+                    local_group_df, arc_df = map_preprocessing(self.groups_df.copy(),self.latencies_df.copy(), arc_map=False)
                 else:
-                    local_group_df, arc_df = map_preprocessing(self.groups_df,self.latencies_df.copy(), id_selection=map_config.id_selection,arc_map=True)
+                    local_group_df, arc_df = map_preprocessing(self.groups_df.copy(),self.latencies_df.copy(), id_selection=map_config.id_selection,arc_map=True)
                 
                 if map_config.data_type == 'Deployments':
                     if map_config.map_type == 'HeatMap':

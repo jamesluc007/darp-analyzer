@@ -26,6 +26,12 @@ class MapConfigWidget():
 def generate_arc_map(data, lat, lon, zoom, id, min_value=0, max_value=300, color_value=100):
     '''Function to define PyDeck objects configurated for arc maps.'''
     # pre filtering
+    try:
+        # This fixes a bug caused when there is no latency data for an specific node
+        data = data[data['latencies'] != 'N']
+    except:
+        pass    
+    data['latencies'] = pd.to_numeric(data['latencies'])
     data = data[data['latencies'] > min_value]
     data = data[data['latencies'] < max_value]
     green_data = data[data['latencies'] < color_value]
