@@ -4,6 +4,7 @@ import numpy as np
 import pydeck as pdk
 
 class MapConfigWidget():
+    '''Class to define a webapp section for Maps Configurations.'''
     def __init__(self, index, ids):
         self.index = index
         self.ids = ids
@@ -18,17 +19,17 @@ class MapConfigWidget():
             self.color_value = st.slider("Color Threshold", 0, 300, 85, key=index)
 
 def generate_arc_map(data, lat, lon, zoom, id, min_value=0, max_value=300, color_value=100):
-
+    '''Function to define PyDeck objects configurated for arc maps.'''
     # pre filtering
     data = data[data['latencies'] > min_value]
     data = data[data['latencies'] < max_value]
-
     green_data = data[data['latencies'] < color_value]
     red_data = data[data['latencies'] > color_value]
 
     GREEN_RGB = [0, 255, 0, 40]
     RED_RGB = [240, 100, 0, 40]
 
+    # map layer definitions:
     arc_layer_1 = pdk.Layer(
     "ArcLayer",
     data=green_data,
@@ -53,6 +54,7 @@ def generate_arc_map(data, lat, lon, zoom, id, min_value=0, max_value=300, color
     pickable=False,
     auto_highlight=True,
     )
+    # map definition:
     st.write(pdk.Deck(
         map_style="mapbox://styles/mapbox/dark-v10",
         initial_view_state={
@@ -65,6 +67,8 @@ def generate_arc_map(data, lat, lon, zoom, id, min_value=0, max_value=300, color
     ))
 
 def generate_heat_map(data, lat, lon, zoom):
+    '''Function to define PyDeck objects configurated for heat maps.'''
+    # map definition:
     st.write(pdk.Deck(
         map_style="mapbox://styles/mapbox/dark-v10",
         initial_view_state={
