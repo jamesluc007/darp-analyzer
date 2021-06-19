@@ -76,7 +76,7 @@ def get_capital_city(country_prefix):
 
     return df_capitals['capital'].iloc[0]
 
-def map_preprocessing(data, latencies, id_selection=0, arc_map=False):
+def map_preprocessing(data, latencies_input, id_selection=0, arc_map=False):
     '''Preprocessinng method for maps generation.'''
     df_map = pd.DataFrame()
     local_group_df = data.copy()
@@ -92,7 +92,7 @@ def map_preprocessing(data, latencies, id_selection=0, arc_map=False):
     if arc_map:
         # Add a column with all the latencies in reference with id_selected node
         index = local_group_df.loc[local_group_df['id'] == id_selection].index[0]
-        latencies = pd.Series.to_frame(latencies[index])
+        latencies = pd.Series.to_frame(latencies_input[index])
         latencies = latencies.rename(columns={index:'latencies'})
         local_group_df = pd.concat([local_group_df, latencies], axis=1, join="inner")
 
@@ -111,6 +111,6 @@ def map_preprocessing(data, latencies, id_selection=0, arc_map=False):
 
     else:
         arc_df=None
-    
+
     return local_group_df, arc_df 
 

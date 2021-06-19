@@ -23,8 +23,8 @@ class WebApp():
         st.write("These are the current running DARP nodes:")
         st.write(self.groups_df)
         self.configuration()
-        self.execute()
         self.update_data_button()
+        self.execute()        
     
     def configuration(self):
         ''' Configuration Section. This handles all the user entries for later visualization generation.'''
@@ -32,10 +32,13 @@ class WebApp():
         st.header("Configure your Visuals:")
 
         self.config_dict['checkbox_raw'] = st.checkbox("Raw Data Visualization", False)
+        st.caption("This generates a big table with all the latency readings.")
 
         self.config_dict['checkbox_map'] = st.checkbox("Map Visualization", False)
+        st.caption("This enables Map Visualizations.")
         if self.config_dict['checkbox_map']:
             self.config_dict['maps_number'] = st.slider("Number of Maps", 1, 4, 1)
+            st.caption("Select the number of desired maps and expand the 'Maps Configuration' tab to configure them.")
             with st.beta_expander("Maps Configuration"):
                 self.config_dict['maps']=[]
                 for i in range(self.config_dict['maps_number']):
@@ -43,6 +46,7 @@ class WebApp():
                     self.config_dict['maps'].append(MapConfigWidget(i, self.groups_df['id']))
 
         self.config_dict['machine_learning'] = st.checkbox("Trigger Machine Learning Prediction", False)
+        st.caption("This enables the Machine Learning section (Not implemented yet).")
     
     def execute(self):
         '''Buttons Section'''
@@ -88,9 +92,9 @@ class WebApp():
                 st.write("Map Number {}:".format(i+1))      
 
                 if map_config.map_type!='ArcMap':
-                    local_group_df, arc_df = map_preprocessing(self.groups_df,self.latencies_df, arc_map=False)
+                    local_group_df, arc_df = map_preprocessing(self.groups_df,self.latencies_df.copy(), arc_map=False)
                 else:
-                    local_group_df, arc_df = map_preprocessing(self.groups_df,self.latencies_df, id_selection=map_config.id_selection,arc_map=True)
+                    local_group_df, arc_df = map_preprocessing(self.groups_df,self.latencies_df.copy(), id_selection=map_config.id_selection,arc_map=True)
                 
                 if map_config.data_type == 'Deployments':
                     if map_config.map_type == 'HeatMap':
@@ -110,6 +114,6 @@ class WebApp():
 # MAIN
 
 st.title("DARP Analyzer Webapp")
-st.write("This web app will help you to visualize and analyze your DARP data.")
+st.write("This web app will create visualizations using DARP data.")
 
 webapp = WebApp()    
