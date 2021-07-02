@@ -174,7 +174,6 @@ ujson==1.35
 unicodecsv==0.14.1
 urllib3==1.25.9
 validators==0.18.2
-vboxapi==1.0
 webencodings==0.5.1
 Werkzeug==1.0.1
 widgetsnbextension==3.5.1
