@@ -123,7 +123,6 @@ pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycodestyle==2.6.0
 pycosat==0.6.3
-pycurl==7.43.0.5
 pydeck==0.6.2
 pyDeprecate==0.3.0
 pyflakes==2.2.0
