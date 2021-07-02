@@ -17,6 +17,7 @@ class WebApp():
         self.groups_df = pd.DataFrame()
         self.latencies_df = pd.DataFrame()
         self.config_dict = {}
+        update_data()
         self._update_data()
 
         # Sections Initialization:
