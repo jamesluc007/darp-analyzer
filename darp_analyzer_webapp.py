@@ -17,7 +17,7 @@ class WebApp():
         self.groups_df = pd.DataFrame()
         self.latencies_df = pd.DataFrame()
         self.config_dict = {}
-        update_data()
+        #update_data()
         self._update_data()
 
         # Sections Initialization:
@@ -61,7 +61,7 @@ class WebApp():
         '''Button for updating DARP data from the server'''
         button = st.button('Update Data')
         if button:
-            update_data()
+            #update_data()
             self._update_data()
     
     def _update_data(self):
