@@ -2,10 +2,10 @@
 GROUPS_DIR=./data/groups/ 
 LATENCIES_DIR=./data/latencies/ 
 
-rm -rfv $GROUPS_DIR
-rm -rfv $LATENCIES_DIR
-mkdir $GROUPS_DIR
-mkdir $LATENCIES_DIR
+#rm -rfv $GROUPS_DIR
+#rm -rfv $LATENCIES_DIR
+#mkdir $GROUPS_DIR
+#mkdir $LATENCIES_DIR
 
 CURL=$(curl 'https://darp.syntropystack.com/api/matrix' \
   -H 'authority: darp.syntropystack.com' \
