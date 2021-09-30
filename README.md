@@ -26,8 +26,8 @@ It uses **streamlit**, an open-source python library for web app designing. Ever
 
 # How to Run It - option 2
 
-1. Checkout to the branch called "deploy"
+- [x] Checkout to the branch called "deploy"
 
-2. Run `pip install requirements.txt`
+- [x] Run `pip install requirements.txt`
 
-3. Run `streamlit run darp_analyzer_webapp.py`
+- [x] Run `streamlit run darp_analyzer_webapp.py`
