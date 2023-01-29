@@ -104,7 +104,7 @@ class WebApp:
                         st.map(local_group_df[["lat", "lon"]])
 
                 elif map_config.data_type == "Latencies":
-                    generate_arc_map(arc_df, 0, 0, 1, map_config.id_selection, map_config.min_value, map_config.max_value, map_config.color_value)
+                    generate_arc_map(arc_df, 0, 0, 1, map_config.min_value, map_config.max_value, map_config.color_value)
 
     def improvement_prediction(self):
         """Section to show Machine Learning Models outputs."""
