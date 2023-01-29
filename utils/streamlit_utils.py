@@ -10,21 +10,21 @@ class MapConfigWidget:
     """
 
     def __init__(self, index, ids):
-        self.index = index
+        self.index = index * 6
         self.ids = ids
-        self.data_type = st.selectbox("Data Type", ["Deployments", "Latencies"], key=index)
+        self.data_type = st.selectbox("Data Type", ["Deployments", "Latencies"], key=self.index + 1)
         st.caption("Deployments maps show the position of every running node on a world map.")
         st.caption("Latencies maps allow you to select one node and see all the conections to that node on a world map.")
         if self.data_type == "Deployments":
-            self.map_type = st.radio("Map Type", ["HeatMap", "DotMap"], key=index)
+            self.map_type = st.radio("Map Type", ["HeatMap", "DotMap"], key=self.index + 2)
         else:
             self.map_type = "ArcMap"
-            self.id_selection = st.selectbox("Select a node ID", self.ids, key=index)
+            self.id_selection = st.selectbox("Select a node ID", self.ids, key=self.index + 3)
             st.caption("This map will show all the connections to node which id is: {}.".format(self.id_selection))
-            self.min_value = int(st.slider("Min Threshold", 0, 300, 0, key=index))
-            self.max_value = int(st.slider("Max Threshold", 0, 300, 300, key=index))
+            self.min_value = int(st.slider("Min Threshold", 0, 300, 0, key=self.index + 4))
+            self.max_value = int(st.slider("Max Threshold", 0, 300, 300, key=self.index + 5))
             st.caption("This map will show all the connections with latencies higher than {}ms and lower than {}ms".format(self.min_value, self.max_value))
-            self.color_value = int(st.slider("Color Threshold", 0, 300, 85, key=index))
+            self.color_value = int(st.slider("Color Threshold", 0, 300, 85, key=self.index + 6))
             st.caption("Latencies lower than {}ms will be shown in green. Latencies higher than {}ms will be shown in red.".format(self.color_value, self.color_value))
 
 

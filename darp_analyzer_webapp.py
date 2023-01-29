@@ -33,9 +33,10 @@ class WebApp:
             st.write("These are the current running DARP nodes:")
             st.write(st.session_state["groups_df"])
             self.update_data_button()
+            self.configuration()
 
         with col2:
-            self.configuration()
+
             self.execute()
 
     def configuration(self) -> None:
@@ -43,7 +44,7 @@ class WebApp:
         Configuration Section. This handles all the user entries for later visualization generation.
         """
 
-        st.header("Configure your Visuals:")
+        st.header("Select how you want to visualize Data:")
 
         self.config_dict["checkbox_raw"] = st.checkbox("Raw Data Visualization", False)
         st.caption("This generates a big table with all the latency readings.")
