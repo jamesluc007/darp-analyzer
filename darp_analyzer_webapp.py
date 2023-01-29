@@ -11,7 +11,9 @@ from make import update_data
 
 class WebApp:
 
-    """Main WebApp class. This class handles all the front-end stuff."""
+    """
+    Main WebApp class. This class handles all the front-end stuff.
+    """
 
     def __init__(self):
         # Attributes Initialization:
@@ -27,8 +29,10 @@ class WebApp:
         self.update_data_button()
         self.execute()
 
-    def configuration(self):
-        """Configuration Section. This handles all the user entries for later visualization generation."""
+    def configuration(self) -> None:
+        """
+        Configuration Section. This handles all the user entries for later visualization generation.
+        """
 
         st.header("Configure your Visuals:")
 
@@ -49,23 +53,29 @@ class WebApp:
         self.config_dict["machine_learning"] = st.checkbox("Trigger Machine Learning Prediction", False)
         st.caption("This enables the Machine Learning section (Not implemented yet).")
 
-    def execute(self):
-        """Buttons Section"""
+    def execute(self) -> None:
+        """
+        Buttons Section
+        """
         execute_button = st.button("Execute")
         if execute_button:
             self.raw_data_visualization()
             self.map_visualization()
             self.improvement_prediction()
 
-    def update_data_button(self):
-        """Button for updating DARP data from the server"""
+    def update_data_button(self) -> None:
+        """
+        Button for updating DARP data from the server
+        """
         button = st.button("Update Data")
         if button:
             update_data()
             self._update_data()
 
-    def _update_data(self):
-        """Internal method for loading data from json files into pandas dataframes."""
+    def _update_data(self) -> None:
+        """
+        Internal method for loading data from json files into pandas dataframes.
+        """
         groups = load_data(data_path="groups")
         latencies = load_data(data_path="latencies")
         self.groups_df = pd.DataFrame.from_dict(groups["nodes"])
@@ -79,14 +89,18 @@ class WebApp:
             new_cities_list.append(city)
         self.groups_df["city"] = new_cities_list
 
-    def raw_data_visualization(self):
-        """Section to show the whole latencies table."""
+    def raw_data_visualization(self) -> None:
+        """
+        Section to show the whole latencies table.
+        """
         if self.config_dict["checkbox_raw"]:
             st.header("Raw Data Visualization")
             st.write(self.latencies_df)
 
-    def map_visualization(self):
-        """Section to show the user required maps."""
+    def map_visualization(self) -> None:
+        """
+        Section to show the user required maps.
+        """
         if self.config_dict["checkbox_map"]:
             st.header("Map Visualization")
             for i, map_config in enumerate(self.config_dict["maps"]):
@@ -106,8 +120,10 @@ class WebApp:
                 elif map_config.data_type == "Latencies":
                     generate_arc_map(arc_df, 0, 0, 1, map_config.min_value, map_config.max_value, map_config.color_value)
 
-    def improvement_prediction(self):
-        """Section to show Machine Learning Models outputs."""
+    def improvement_prediction(self) -> None:
+        """
+        Section to show Machine Learning Models outputs.
+        """
         if self.config_dict["machine_learning"]:
             st.header("ML Modelling")
             st.write("here it goes my model")
